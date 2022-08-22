@@ -1,6 +1,11 @@
 # Include the googletest module
 add_subdirectory("${PROJECT_SOURCE_DIR}/external/googletest" "external/googletest")
 
+#add_compile_definitions(PROJECT_ROOT=${PROJECT_SOURCE_DIR})
+set(PROJECT_ROOT_STRING ${CMAKE_SOURCE_DIR})
+configure_file(${CMAKE_SOURCE_DIR}/external/config/root_path.h.in ${CMAKE_BINARY_DIR}/generated/root_path.h @ONLY)
+include_directories( ${CMAKE_BINARY_DIR}/generated/ ) # Make sure it can be included...
+
 # This is optional but keeps CACHE cleaner
 mark_as_advanced(
         BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
