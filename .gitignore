@@ -1,6 +1,8 @@
 .DS_Store
 .idea/
 cmake-build-debug/
+cmake-build-release/
+build/
 
 external/games/
 test/cartridges/blarggs_tests/
