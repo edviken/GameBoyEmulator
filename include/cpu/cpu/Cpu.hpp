@@ -24,14 +24,21 @@ class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new 
   void setRegA(uint8_t value);
   void setRegB(uint8_t value);
   void setRegC(uint8_t value);
+  void setRegD(uint8_t value);
+  void setRegE(uint8_t value);
+  void setRegH(uint8_t value);
+  void setRegL(uint8_t value);
 
   uint8_t getRegA();
   uint8_t getRegF();
 
  private:
   void addAB() { _a += _b; }
-
   void addAC() { _a += _c; }
+  void addAD() { _a += _d; }
+  void addAE() { _a += _e; }
+  void addAH() { _a += _h; }
+  void addAL() { _a += _l; }
 
   /// Decoder object to decode the instructions read from the program
   Decoder decoder;

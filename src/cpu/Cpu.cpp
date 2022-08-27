@@ -13,6 +13,18 @@ void Cpu::execute(uint8_t instruction) {
     case 0x81:
       addAC();
       break;
+    case 0x82:
+      addAD();
+      break;
+    case 0x83:
+      addAE();
+      break;
+    case 0x84:
+      addAH();
+      break;
+    case 0x85:
+      addAL();
+      break;
     default:
       std::cout << "Warning, unimplemented OpCode executed" << std::endl;
       break;
@@ -29,6 +41,22 @@ void Cpu::setRegB(uint8_t value) {
 
 void Cpu::setRegC(uint8_t value) {
   _c = value;
+}
+
+void Cpu::setRegD(uint8_t value) {
+  _d = value;
+}
+
+void Cpu::setRegE(uint8_t value) {
+  _e = value;
+}
+
+void Cpu::setRegH(uint8_t value) {
+  _h = value;
+}
+
+void Cpu::setRegL(uint8_t value) {
+  _l = value;
 }
 
 uint8_t Cpu::getRegA() {
