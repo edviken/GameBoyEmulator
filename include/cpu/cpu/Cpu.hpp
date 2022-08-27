@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <limits>
 #include "decoder/Decoder.hpp"
+#include "register/Register.hpp"
 
 class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new inherited class)
              /**
@@ -22,37 +23,39 @@ class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new 
 
   void setRegA(uint8_t value);
   void setRegB(uint8_t value);
+  void setRegC(uint8_t value);
 
   uint8_t getRegA();
   uint8_t getRegF();
 
  private:
   void addAB() {
-    if (a > 0 && b > std::numeric_limits<uint8_t>::max() - a) {
-      f |= 0x01 << 4;
-    } else if (a == 0 && b == 0) {
-      f |= 0x01 << 7;
-    }
-    a += b;
+    _a += _b;
+    _f = _a.getFlag();
+  }
+
+  void addAC() {
+    _a += _c;
+    _f = _a.getFlag();
   }
 
   /// Decoder object to decode the instructions read from the program
   Decoder decoder;
 
   /// Accumulator register
-  uint8_t a{0};
+  ByteRegister _a;
 
   /// General purpose registers
-  uint8_t b{0}, c{0}, d{0}, e{0}, h{0}, l{0};
+  ByteRegister _b, _c, _d, _e, _h, _l;
 
   /// Flag register
-  uint8_t f{0};
+  uint8_t _f{0};
 
   /// Stack pointer
-  uint16_t sp{0};
+  uint16_t _sp{0};
 
   /// Program counter
-  uint16_t pc{0};
+  uint16_t _pc{0};
 };
 
 #endif  //GAMEBOYEMULATOR_CPU_HPP

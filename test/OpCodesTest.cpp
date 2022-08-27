@@ -35,6 +35,16 @@ TEST_P(OpCodesTest, testOpCodeAddAB) {
   ASSERT_EQ(std::get<3>(GetParam()), cpu.getRegF());
 }
 
+TEST_P(OpCodesTest, testOpCodeAddAC) {
+  // ADD A B flags: z0hc
+  cpu.setRegA(std::get<0>(GetParam()));
+  cpu.setRegC(std::get<1>(GetParam()));
+
+  cpu.execute(0x81);
+  ASSERT_EQ(std::get<2>(GetParam()), cpu.getRegA());
+  ASSERT_EQ(std::get<3>(GetParam()), cpu.getRegF());
+}
+
 // Values in the tuple are: std::tuple<in_A, in_B, out_A, out_F>
 INSTANTIATE_TEST_SUITE_P(testOpCodeAddAB, OpCodesTest,
                          testing::Values(std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>(0x01, 0x01, 0x02, 0x00),
