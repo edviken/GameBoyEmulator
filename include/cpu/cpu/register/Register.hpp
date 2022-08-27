@@ -9,7 +9,7 @@
 
 class ByteRegister {
  public:
-  ByteRegister() = default;
+  ByteRegister(uint8_t& flag) : _flag(flag) {}
 
   ByteRegister& operator=(const uint8_t rhs) {
     if (this->_value != rhs) {
@@ -40,12 +40,6 @@ class ByteRegister {
 
   uint8_t value() { return _value; }
 
-  uint8_t getFlag() {
-    auto retVal = _flag;
-    _flag = 0x00;
-    return retVal;
-  }
-
  private:
   bool checkIfOverflow(const ByteRegister& rhs) {
     bool res = false;
@@ -64,7 +58,7 @@ class ByteRegister {
   }
 
   uint8_t _value{0x00};
-  uint8_t _flag{0x00};
+  uint8_t& _flag;
 };
 
 #endif  //GAMEBOYEMULATOR_REGISTER_HPP

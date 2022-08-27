@@ -29,27 +29,21 @@ class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new 
   uint8_t getRegF();
 
  private:
-  void addAB() {
-    _a += _b;
-    _f = _a.getFlag();
-  }
+  void addAB() { _a += _b; }
 
-  void addAC() {
-    _a += _c;
-    _f = _a.getFlag();
-  }
+  void addAC() { _a += _c; }
 
   /// Decoder object to decode the instructions read from the program
   Decoder decoder;
 
-  /// Accumulator register
-  ByteRegister _a;
-
-  /// General purpose registers
-  ByteRegister _b, _c, _d, _e, _h, _l;
-
   /// Flag register
   uint8_t _f{0};
+
+  /// Accumulator register
+  ByteRegister _a{_f};
+
+  /// General purpose registers
+  ByteRegister _b{_f}, _c{_f}, _d{_f}, _e{_f}, _h{_f}, _l{_f};
 
   /// Stack pointer
   uint16_t _sp{0};
