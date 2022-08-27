@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "disassembler/Cartridge.hpp"
+#include "generated/root_path.h"
 #include "memory/Memory.hpp"
 
 int main() {

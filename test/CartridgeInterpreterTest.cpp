@@ -2,7 +2,7 @@
 // Created by Martin Edviken on 2022-08-20.
 //
 #include "disassembler/Cartridge.hpp"
-#include "root_path.h"
+#include "generated/root_path.h"
 
 #include <gtest/gtest.h>
 
@@ -24,3 +24,5 @@ TEST_F(CartridgeInterpreterTest, readBinaryData) {
   data = cartridge.getData();
   ASSERT_EQ(data, refData);
 }
+
+TEST_F(CartridgeInterpreterTest, InterpretFirstOperation) {}
