@@ -28,6 +28,7 @@ class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new 
   void setRegE(uint8_t value);
   void setRegH(uint8_t value);
   void setRegL(uint8_t value);
+  void setRegHL(uint16_t value);
 
   uint8_t getRegA();
   uint8_t getRegF();
@@ -39,18 +40,22 @@ class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new 
   void addAE() { _a += _e; }
   void addAH() { _a += _h; }
   void addAL() { _a += _l; }
+  void addAHL() { _a += _hl; }
+  void addAA() { _a += _a; }
 
   /// Decoder object to decode the instructions read from the program
   Decoder decoder;
 
   /// Flag register
-  uint8_t _f{0};
+  uint8_t _f{0};  // TODO: Refactoring - Add special FlagRegister class
 
   /// Accumulator register
   ByteRegister _a{_f};
 
   /// General purpose registers
   ByteRegister _b{_f}, _c{_f}, _d{_f}, _e{_f}, _h{_f}, _l{_f};
+
+  WordRegister _hl{_h, _l};
 
   /// Stack pointer
   uint16_t _sp{0};

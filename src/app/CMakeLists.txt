@@ -5,3 +5,5 @@ target_link_libraries(GameBoyEmulator PUBLIC
         cpu
         memory
         )
+
+target_compile_options(GameBoyEmulator PRIVATE -Wall -Wextra -Wpedantic -Werror)

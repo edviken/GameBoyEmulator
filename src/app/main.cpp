@@ -11,7 +11,7 @@ int main() {
   cartridge.readDataFromFile("../../../external/games/Super-Mario-Land-4.gb");
   auto progData = cartridge.getProgramData();
 
-  Memory mem{};
+  [[maybe_unused]] Memory mem{};
   //  mem.setProgramData();
 
   return 0;
