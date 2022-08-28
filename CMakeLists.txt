@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(GameBoyEmulator)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Create a generated file with cmake variables that's publicly available in this project
 set(PROJECT_ROOT_STRING ${CMAKE_SOURCE_DIR})

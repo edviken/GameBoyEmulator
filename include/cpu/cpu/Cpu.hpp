@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <limits>
 #include "decoder/Decoder.hpp"
+#include "register/Register.hpp"
 
 class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new inherited class)
              /**
@@ -22,37 +23,45 @@ class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new 
 
   void setRegA(uint8_t value);
   void setRegB(uint8_t value);
+  void setRegC(uint8_t value);
+  void setRegD(uint8_t value);
+  void setRegE(uint8_t value);
+  void setRegH(uint8_t value);
+  void setRegL(uint8_t value);
+  void setRegHL(uint16_t value);
 
   uint8_t getRegA();
   uint8_t getRegF();
 
  private:
-  void addAB() {
-    if (a > 0 && b > std::numeric_limits<uint8_t>::max() - a) {
-      f |= 0x01 << 4;
-    } else if (a == 0 && b == 0) {
-      f |= 0x01 << 7;
-    }
-    a += b;
-  }
+  void addAB() { _a += _b; }
+  void addAC() { _a += _c; }
+  void addAD() { _a += _d; }
+  void addAE() { _a += _e; }
+  void addAH() { _a += _h; }
+  void addAL() { _a += _l; }
+  void addAHL() { _a += _hl; }
+  void addAA() { _a += _a; }
 
   /// Decoder object to decode the instructions read from the program
   Decoder decoder;
 
+  /// Flag register
+  uint8_t _f{0};  // TODO: Refactoring - Add special FlagRegister class
+
   /// Accumulator register
-  uint8_t a{0};
+  ByteRegister _a{_f};
 
   /// General purpose registers
-  uint8_t b{0}, c{0}, d{0}, e{0}, h{0}, l{0};
+  ByteRegister _b{_f}, _c{_f}, _d{_f}, _e{_f}, _h{_f}, _l{_f};
 
-  /// Flag register
-  uint8_t f{0};
+  WordRegister _hl{_h, _l};
 
   /// Stack pointer
-  uint16_t sp{0};
+  uint16_t _sp{0};
 
   /// Program counter
-  uint16_t pc{0};
+  uint16_t _pc{0};
 };
 
 #endif  //GAMEBOYEMULATOR_CPU_HPP
