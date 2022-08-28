@@ -6,6 +6,8 @@
 #define GAMEBOYEMULATOR_CARTRIDGE_HPP
 
 #include <array>
+#include <cstdint>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -67,7 +69,7 @@ enum class CartridgeType {
 
 /// Array of pairs where the array index corresponds to the number at address 0x148.
 /// The pairs consist of first = ROM size in KiB and second = number of ROM banks.
-static std::array<std::pair<uint16_t, uint8_t>, 12> romSizes{
+[[maybe_unused]] static std::array<std::pair<uint16_t, uint8_t>, 12> romSizes{
     {{32, 2},
      {64, 4},
      {128, 8},
@@ -84,7 +86,7 @@ static std::array<std::pair<uint16_t, uint8_t>, 12> romSizes{
 
 /// Array of pairs where the array index corresponds to the number at address 0x149.
 /// The pairs consist of first = ROM size in KiB and second = number of ROM banks.
-static std::array<std::pair<uint16_t, uint8_t>, 6> ramSizes{
+[[maybe_unused]] static std::array<std::pair<uint16_t, uint8_t>, 6> ramSizes{
     {{0, 0}, {0, 0}, {8, 1}, {32, 4}, {128, 16}, {64, 8}}
 };
 

@@ -7,18 +7,18 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <string>
 
 #include <errno.h>
 #include <unistd.h>
-#include <valarray>
+#include <cassert>
+#include <cstring>
 
 void Cartridge::readDataFromFile(std::string filename) {  // TODO: Adapt for cross-platform compatibility ?
   // TODO: Also do a pre-check that file exists ?
   errno = 0;
   std::ifstream file(filename, std::ios::in | std::ios::binary);
   if (!file.is_open() || errno != 0) {
-    std::cout << "Errno: " << errno << " - " << strerror(errno) << std::endl;
+    std::cout << "Errno: " << errno << " - " << std::strerror(errno) << std::endl;
     std::cout << "Failed to open file: " << filename << std::endl;
     char dirBuf[255]{};
     auto dir = getcwd(dirBuf, 255);
