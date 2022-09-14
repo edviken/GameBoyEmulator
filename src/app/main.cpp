@@ -2,15 +2,15 @@
 
 #include "disassembler/CartridgeLoader.hpp"
 #include "generated/root_path.h"
+#include "logger/Logger.hpp"
 #include "memory/Memory.hpp"
 
 int main(int argc, char** args) {
   if (argc < 2) {
-    std::cout << "Please enter rom path as argument" << std::endl;
+    LOG_ERROR("Please enter rom path as argument");
     return 0;
   }
-  std::cout << "The rom path entered is: " << args[1] << std::endl;
-  std::cout << "Hello, World!" << std::endl;
+  LOG_INFO("The rom path entered is: %s", args[1]);
 
   CartridgeLoader cartridge{};
   cartridge.readDataFromFile(args[1]);

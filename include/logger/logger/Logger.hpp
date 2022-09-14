@@ -24,11 +24,11 @@ class Logger {
 
 extern Logger globalLogger;
 
-#define LOG_DEBUG(str, ...) globalLogger.log(Logger::LogLevel::Debug, __FILE_NAME__, __LINE__, str, ##__VA_ARGS__);
-#define LOG_INFO(str, ...) globalLogger.log(Logger::LogLevel::Info, __FILE_NAME__, __LINE__, str, ##__VA_ARGS__);
-#define LOG_WARNING(str, ...) globalLogger.log(Logger::LogLevel::Warning, __FILE_NAME__, __LINE__, str, ##__VA_ARGS__);
-#define LOG_ERROR(str, ...) globalLogger.log(Logger::LogLevel::Error, __FILE_NAME__, __LINE__, str, ##__VA_ARGS__);
-#define LOG_PANIC(str, ...) globalLogger.log(Logger::LogLevel::Panic, __FILE_NAME__, __LINE__, str, ##__VA_ARGS__);
+#define LOG_DEBUG(...) globalLogger.log(Logger::LogLevel::Debug, __FILE_NAME__, __LINE__, __VA_ARGS__);
+#define LOG_INFO(...) globalLogger.log(Logger::LogLevel::Info, __FILE_NAME__, __LINE__, __VA_ARGS__);
+#define LOG_WARNING(...) globalLogger.log(Logger::LogLevel::Warning, __FILE_NAME__, __LINE__, __VA_ARGS__);
+#define LOG_ERROR(...) globalLogger.log(Logger::LogLevel::Error, __FILE_NAME__, __LINE__, __VA_ARGS__);
+#define LOG_PANIC(...) globalLogger.log(Logger::LogLevel::Panic, __FILE_NAME__, __LINE__, __VA_ARGS__);
 
 //}  // namespace logger
 
