@@ -2,7 +2,7 @@
 // Created by Martin Edviken on 2022-08-24.
 //
 #include "cpu/Cpu.hpp"
-#include "disassembler/Cartridge.hpp"
+#include "disassembler/CartridgeLoader.hpp"
 
 #include <gtest/gtest.h>
 
@@ -12,7 +12,7 @@ class OpCodesTest : public ::testing::TestWithParam<std::tuple<uint8_t, uint8_t,
 
   void TearDown() override {}
 
-  Cartridge cartridge{};
+  CartridgeLoader cartridge{};
   Cpu cpu{};
 };
 

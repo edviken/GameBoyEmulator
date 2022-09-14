@@ -2,18 +2,18 @@
 // Created by Martin Edviken on 2022-07-22.
 //
 
-#include "disassembler/Cartridge.hpp"
-
-#include <fstream>
-#include <iostream>
-#include <iterator>
+#include "disassembler/CartridgeLoader.hpp"
 
 #include <errno.h>
 #include <unistd.h>
 #include <cassert>
 #include <cstring>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include "logger/Logger.hpp"
 
-void Cartridge::readDataFromFile(std::string filename) {  // TODO: Adapt for cross-platform compatibility ?
+void CartridgeLoader::readDataFromFile(std::string filename) {  // TODO: Adapt for cross-platform compatibility ?
   // TODO: Also do a pre-check that file exists ?
   errno = 0;
   std::ifstream file(filename, std::ios::in | std::ios::binary);
@@ -33,7 +33,7 @@ void Cartridge::readDataFromFile(std::string filename) {  // TODO: Adapt for cro
   file.seekg(0, file.end);
   uint64_t size = file.tellg();
   file.seekg(0, file.beg);
-  std::cout << "The file size is " << size << " bytes" << std::endl;
+  LOG_INFO("The file size is %d bytes", size);
 
   // Read the data from the file
   _rawData.reserve(size);
@@ -41,15 +41,13 @@ void Cartridge::readDataFromFile(std::string filename) {  // TODO: Adapt for cro
   file.close();
 
   if (_rawData.size() >= CartridgeHeader::GlobalChecksum) {
-    std::cout << "Cartridge type: " << static_cast<int>(_rawData.at(CartridgeHeader::CartridgeType)) << std::endl;
-    std::cout << "Rom size: " << romSizes.at(static_cast<int>(_rawData.at(CartridgeHeader::RomSize))).first << "KiB"
-              << std::endl;
-    std::cout << "Ram size: " << ramSizes.at(static_cast<int>(_rawData.at(CartridgeHeader::RamSize))).first << "KiB"
-              << std::endl;
+    LOG_INFO("Cartridge type: %d", static_cast<int>(_rawData.at(CartridgeHeader::CartridgeType)));
+    LOG_INFO("Rom size: %d KiB", romSizes.at(static_cast<int>(_rawData.at(CartridgeHeader::RomSize))).first);
+    LOG_INFO("Ram size: %d KiB", romSizes.at(static_cast<int>(_rawData.at(CartridgeHeader::RamSize))).first);
   }
 }
 
-std::vector<uint8_t> Cartridge::getProgramData() {
+std::vector<uint8_t> CartridgeLoader::getProgramData() {
   if (_rawData.empty()) {
     assert(0);
   }
@@ -59,7 +57,7 @@ std::vector<uint8_t> Cartridge::getProgramData() {
       _rawData.begin() + 0x150 + romSize);  // TODO: interpret this value from OPCode on 0x0100 - 0x0103
 }
 
-std::vector<uint8_t> Cartridge::getData() {
+std::vector<uint8_t> CartridgeLoader::getData() {
   if (_rawData.empty()) {
     assert(0);
   }

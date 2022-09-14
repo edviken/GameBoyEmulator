@@ -4,6 +4,7 @@
 
 #include "cpu/Cpu.hpp"
 #include <iostream>
+#include "logger/Logger.hpp"
 
 void Cpu::execute(uint8_t instruction) {
   switch (instruction) {
@@ -32,7 +33,7 @@ void Cpu::execute(uint8_t instruction) {
       addAA();
       break;
     default:
-      std::cout << "Warning, unimplemented OpCode executed" << std::endl;
+      LOG_INFO("Warning, unimplemented OpCode executed");
       break;
   }
 }

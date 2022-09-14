@@ -1,7 +1,7 @@
 //
 // Created by Martin Edviken on 2022-08-20.
 //
-#include "disassembler/Cartridge.hpp"
+#include "disassembler/CartridgeLoader.hpp"
 #include "generated/root_path.h"
 
 #include <gtest/gtest.h>
@@ -12,7 +12,7 @@ class CartridgeInterpreterTest : public ::testing::Test {
 
   void TearDown() override {}
 
-  Cartridge cartridge{};
+  CartridgeLoader cartridge{};
 };
 
 TEST_F(CartridgeInterpreterTest, readBinaryData) {

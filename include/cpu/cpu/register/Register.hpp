@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <limits>
+#include <utility>
 
 class WordRegister;  ///< Forward declaration
 
@@ -98,6 +99,24 @@ class WordRegister : public Register<uint16_t> {
  private:
   ByteRegister& _high;
   ByteRegister& _low;
+};
+
+class FlagRegister : public Register<uint8_t> {
+ public:
+  enum class Flag : uint8_t { C = 4, H, N, Z, NbrOfBits };
+
+  FlagRegister() = default;
+
+  void set(uint8_t value) override { _value = value; }
+
+  void set(Flag f) { _value |= (0x01 << static_cast<std::underlying_type_t<Flag>>(f)); }
+
+  void reset() override { _value = 0; }
+
+  uint8_t value() const override { return _value; }
+
+ private:
+  uint8_t _value;
 };
 
 #endif  //GAMEBOYEMULATOR_REGISTER_HPP

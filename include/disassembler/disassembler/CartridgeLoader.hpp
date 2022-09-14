@@ -2,8 +2,8 @@
 // Created by Martin Edviken on 2022-07-22.
 //
 
-#ifndef GAMEBOYEMULATOR_CARTRIDGE_HPP
-#define GAMEBOYEMULATOR_CARTRIDGE_HPP
+#ifndef GAMEBOYEMULATOR_CARTRIDGELOADER_HPP
+#define GAMEBOYEMULATOR_CARTRIDGELOADER_HPP
 
 #include <array>
 #include <cstdint>
@@ -91,17 +91,30 @@ enum class CartridgeType {
 };
 
 /**
- * @brief TODO
+ * @brief Loads the bytes from a .gb file and reads the cartridge header,
+ *        saves information and extracts the game bytes for the CPU to process.
  */
-class Cartridge {
+class CartridgeLoader {
  public:
   /// Constructor
-  Cartridge() = default;
+  CartridgeLoader() = default;
 
+  /**
+   * @brief Given an input filename, it reads the bytes and holds a reference to it
+   * @param filename The path to the file
+   */
   void readDataFromFile(std::string filename);
 
+  /**
+   * @brief Fetches the program data as specified in the Cartridge header
+   * @return The program bytes
+   */
   std::vector<uint8_t> getProgramData();
 
+  /**
+   * @brief Gets data from the read file
+   * @return The data as bytes
+   */
   std::vector<uint8_t> getData();
 
  private:
@@ -109,11 +122,4 @@ class Cartridge {
   uint16_t _kiloMultiplyer = 1000;
 };
 
-/*
- * TODO: 1. cartridge bytes should be read. - Done
- * TODO: 2. Location of "game"-bytes should be found. - Done
- * TODO: 3. Save the game-bytes in an array/vector to be stepped through by the PC. - Done
- * TODO: 4. Bytes should be translated to CPU instructions ( - Belongs in CPU class ?? )
- */
-
-#endif  // GAMEBOYEMULATOR_CARTRIDGE_HPP
+#endif  // GAMEBOYEMULATOR_CARTRIDGELOADER_HPP
