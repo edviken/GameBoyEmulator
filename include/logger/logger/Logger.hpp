@@ -29,7 +29,7 @@ extern Logger globalLogger;
 #if defined(__clang__)  // If using clang compiler
 // Nothing to do, __FILE_NAME__ already defined by clang
 #elif defined(__GNUC__) || defined(__GNUG__)  // If using GCC compiler
-#define __FILE_NAME__ (strrchr("/" __FILE__, '/') + 1);
+#define __FILE_NAME__ strrchr("/" __FILE__, '/') + 1
 #elif defined(_MSC_VER)  // If using MSVC compiler
 #endif
 

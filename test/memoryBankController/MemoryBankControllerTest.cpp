@@ -106,10 +106,10 @@ TEST_F(MemoryBankControllerTest, RamBankNumberSelect) {
 
   // Specifying the upper two bits in the ROM bank number
   mbc1.write(0x4000, 0x03);
-  ASSERT_EQ(mbc1.getRomBankNumber(), 0x18);
+  ASSERT_EQ(mbc1.getRomBankNumber(), 0x19);
   // Only first two bits of the value matter.
   mbc1.write(0x4000, 0x0F);
-  ASSERT_EQ(mbc1.getRomBankNumber(), 0x18);
+  ASSERT_EQ(mbc1.getRomBankNumber(), 0x19);
 
   // ----------------------------------------
 
