@@ -1,6 +1,7 @@
 add_library(disassemblerLib STATIC
-        ${CMAKE_SOURCE_DIR}/src/disassembler/CartridgeLoader.cpp
+        ${CMAKE_SOURCE_DIR}/src/disassembler/Cartridge.cpp
         ${CMAKE_SOURCE_DIR}/src/disassembler/mbc/MemoryBankController.cpp
+        ${CMAKE_SOURCE_DIR}/src/disassembler/Loader.cpp
         )
 
 target_include_directories(disassemblerLib PUBLIC
@@ -11,3 +12,5 @@ target_include_directories(disassemblerLib PUBLIC
 target_link_libraries(disassemblerLib PRIVATE
         loggerLib
         )
+
+target_compile_options(disassemblerLib PUBLIC -Wno-unused-parameter)

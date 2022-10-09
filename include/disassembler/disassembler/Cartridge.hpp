@@ -2,8 +2,8 @@
 // Created by Martin Edviken on 2022-07-22.
 //
 
-#ifndef GAMEBOYEMULATOR_CARTRIDGELOADER_HPP
-#define GAMEBOYEMULATOR_CARTRIDGELOADER_HPP
+#ifndef GAMEBOYEMULATOR_CARTRIDGE_HPP
+#define GAMEBOYEMULATOR_CARTRIDGE_HPP
 
 #include <array>
 #include <cstdint>
@@ -11,12 +11,16 @@
 #include <utility>
 #include <vector>
 
+#include "CartridgeInterface.hpp"
+#include "Loader.hpp"
+#include "mbc/MemoryBankController.hpp"
+
 /**
  * @brief Cartridge header that contains information about
  *        the games itself and its expected hardware to run on.
  */
 enum CartridgeHeader {
-  EntryPoint = 0x0100,
+  EntryPoint = 0x100,
   NintendoLogo = 0x104,
   Title = 0x134,
   ManufacturerCode = 0x013F,
@@ -94,32 +98,31 @@ enum class CartridgeType {
  * @brief Loads the bytes from a .gb file and reads the cartridge header,
  *        saves information and extracts the game bytes for the CPU to process.
  */
-class CartridgeLoader {
+class Cartridge : public CartridgeInterface {
  public:
   /// Constructor
-  CartridgeLoader() = default;
-
-  /**
-   * @brief Given an input filename, it reads the bytes and holds a reference to it
-   * @param filename The path to the file
-   */
-  void readDataFromFile(std::string filename);
+  explicit Cartridge(LoaderInterface& loader)
+      : _cartridgeLoader(loader), _rawData(_cartridgeLoader.readDataFromFile()) {}
 
   /**
    * @brief Fetches the program data as specified in the Cartridge header
    * @return The program bytes
    */
-  std::vector<uint8_t> getProgramData();
+  std::vector<uint8_t> getProgramData() override;
 
   /**
    * @brief Gets data from the read file
    * @return The data as bytes
    */
-  std::vector<uint8_t> getData();
+  std::vector<uint8_t> getData() override;
 
  private:
+  void setMemoryBankController();
+
+  LoaderInterface& _cartridgeLoader;
   std::vector<uint8_t> _rawData{};
-  uint16_t _kiloMultiplyer = 1000;
+  uint16_t _kiloMultiplyer{1000};
+  MemoryBankController* _mbc{nullptr};
 };
 
-#endif  // GAMEBOYEMULATOR_CARTRIDGELOADER_HPP
+#endif  // GAMEBOYEMULATOR_CARTRIDGE_HPP

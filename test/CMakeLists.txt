@@ -35,6 +35,7 @@ endmacro()
 package_add_test(CartridgeInterpreterTest
         CartridgeInterpreterTest.cpp
         OpCodesTest.cpp
+        memoryBankController/MemoryBankControllerTest.cpp
         )
 
 target_link_libraries(CartridgeInterpreterTest

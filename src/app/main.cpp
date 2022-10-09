@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "disassembler/CartridgeLoader.hpp"
+#include "disassembler/Cartridge.hpp"
 #include "generated/root_path.h"
 #include "logger/Logger.hpp"
 #include "memory/Memory.hpp"
@@ -12,8 +12,8 @@ int main(int argc, char** args) {
   }
   LOG_INFO("The rom path entered is: %s", args[1]);
 
-  CartridgeLoader cartridge{};
-  cartridge.readDataFromFile(args[1]);
+  Loader fileLoader{args[1]};
+  Cartridge cartridge{fileLoader};
   auto progData = cartridge.getProgramData();
 
   [[maybe_unused]] Memory mem{};
