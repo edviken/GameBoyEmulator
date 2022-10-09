@@ -1,6 +1,7 @@
 //
 // Created by Martin Edviken on 2022-09-12.
 //
+#include <cassert>
 
 #include "disassembler/mbc/MemoryBankController.hpp"
 #include "logger/Logger.hpp"
@@ -19,6 +20,7 @@ uint8_t MBC1::read(uint16_t addr) const {
   } else if (addr >= generalRomBankStart && addr <= generalRomBankEnd) {
     return _data.at(addr + ((_romBankNumber - 1) * generalRomBankStart));
   }
+  return 0;
 }
 
 void MBC1::write(uint16_t addr, uint8_t value) {

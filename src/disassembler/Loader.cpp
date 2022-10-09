@@ -6,6 +6,7 @@
 
 #include <errno.h>
 #include <unistd.h>
+#include <cassert>
 #include <cstring>
 #include <fstream>
 #include <iostream>
