@@ -1,6 +1,7 @@
 //
 // Created by Martin Edviken on 2022-08-24.
 //
+#include "../mock/LoaderMock.hpp"
 #include "cpu/Cpu.hpp"
 #include "disassembler/Cartridge.hpp"
 
@@ -12,7 +13,8 @@ class OpCodesTest : public ::testing::TestWithParam<std::tuple<uint8_t, uint8_t,
 
   void TearDown() override {}
 
-  Cartridge cartridge{};
+  std::unique_ptr<LoaderMock> _loader = std::make_unique<LoaderMock>();
+  Cartridge cartridge{*_loader};
   Cpu cpu{};
 };
 

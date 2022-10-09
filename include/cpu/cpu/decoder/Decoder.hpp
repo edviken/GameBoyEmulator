@@ -6,6 +6,7 @@
 #define GAMEBOYEMULATOR_DECODER_HPP
 
 #include <array>
+#include <cstdint>
 #include <map>
 
 /// The possible instructions and their occupancy of bytes.

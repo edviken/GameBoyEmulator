@@ -1,6 +1,7 @@
 # Include the googletest module
 add_subdirectory("${PROJECT_SOURCE_DIR}/external/googletest" "external/googletest")
 
+# TODO: consider using cmakes gtest_discover_tests() instead
 
 # This is optional but keeps CACHE cleaner
 mark_as_advanced(
@@ -34,6 +35,7 @@ endmacro()
 package_add_test(CartridgeInterpreterTest
         CartridgeInterpreterTest.cpp
         OpCodesTest.cpp
+        memoryBankController/MemoryBankControllerTest.cpp
         )
 
 target_link_libraries(CartridgeInterpreterTest

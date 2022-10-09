@@ -10,8 +10,12 @@
 #include "decoder/Decoder.hpp"
 #include "register/Register.hpp"
 
-class Cpu {  // TODO: Creat a Sharp SM83 version (add SM83 in class name or new inherited class)
-             /**
+// TODO: Creat a Sharp SM83 version (add SM83 in class name or new inherited class)
+// 1. create run member function that fetches bytes, calls execute and holds track of timer to have the right tick frequency.
+// 2. Run member function will need to update framebuffer in the future.
+// 3. PC needs to be able to fetch bytes from correct ROM bank (if any)
+class Cpu {
+  /**
    * The CPU has 3 states, fetch, decode and execute.
    * Should I model these in a finite state machine?? (with boost::sml)
    */

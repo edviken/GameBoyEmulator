@@ -6,15 +6,21 @@
 #define GAMEBOYEMULATOR_CARTRIDGE_HPP
 
 #include <array>
+#include <cstdint>
+#include <string>
 #include <utility>
 #include <vector>
+
+#include "CartridgeInterface.hpp"
+#include "Loader.hpp"
+#include "mbc/MemoryBankController.hpp"
 
 /**
  * @brief Cartridge header that contains information about
  *        the games itself and its expected hardware to run on.
  */
 enum CartridgeHeader {
-  EntryPoint = 0x0100,
+  EntryPoint = 0x100,
   NintendoLogo = 0x104,
   Title = 0x134,
   ManufacturerCode = 0x013F,
@@ -67,7 +73,7 @@ enum class CartridgeType {
 
 /// Array of pairs where the array index corresponds to the number at address 0x148.
 /// The pairs consist of first = ROM size in KiB and second = number of ROM banks.
-static std::array<std::pair<uint16_t, uint8_t>, 12> romSizes{
+[[maybe_unused]] static std::array<std::pair<uint16_t, uint8_t>, 12> romSizes{
     {{32, 2},
      {64, 4},
      {128, 8},
@@ -84,34 +90,39 @@ static std::array<std::pair<uint16_t, uint8_t>, 12> romSizes{
 
 /// Array of pairs where the array index corresponds to the number at address 0x149.
 /// The pairs consist of first = ROM size in KiB and second = number of ROM banks.
-static std::array<std::pair<uint16_t, uint8_t>, 6> ramSizes{
+[[maybe_unused]] static std::array<std::pair<uint16_t, uint8_t>, 6> ramSizes{
     {{0, 0}, {0, 0}, {8, 1}, {32, 4}, {128, 16}, {64, 8}}
 };
 
 /**
- * @brief TODO
+ * @brief Loads the bytes from a .gb file and reads the cartridge header,
+ *        saves information and extracts the game bytes for the CPU to process.
  */
-class Cartridge {
+class Cartridge : public CartridgeInterface {
  public:
   /// Constructor
-  Cartridge() = default;
+  explicit Cartridge(LoaderInterface& loader)
+      : _cartridgeLoader(loader), _rawData(_cartridgeLoader.readDataFromFile()) {}
 
-  void readDataFromFile(std::string filename);
+  /**
+   * @brief Fetches the program data as specified in the Cartridge header
+   * @return The program bytes
+   */
+  std::vector<uint8_t> getProgramData() override;
 
-  std::vector<uint8_t> getProgramData();
-
-  std::vector<uint8_t> getData();
+  /**
+   * @brief Gets data from the read file
+   * @return The data as bytes
+   */
+  std::vector<uint8_t> getData() override;
 
  private:
-  std::vector<uint8_t> _rawData{};
-  uint16_t _kiloMultiplyer = 1000;
-};
+  void setMemoryBankController();
 
-/*
- * TODO: 1. cartridge bytes should be read. - Done
- * TODO: 2. Location of "game"-bytes should be found. - Done
- * TODO: 3. Save the game-bytes in an array/vector to be stepped through by the PC. - Done
- * TODO: 4. Bytes should be translated to CPU instructions ( - Belongs in CPU class ?? )
- */
+  LoaderInterface& _cartridgeLoader;
+  std::vector<uint8_t> _rawData{};
+  uint16_t _kiloMultiplyer{1000};
+  MemoryBankController* _mbc{nullptr};
+};
 
 #endif  // GAMEBOYEMULATOR_CARTRIDGE_HPP

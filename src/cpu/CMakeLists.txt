@@ -8,3 +8,5 @@ target_include_directories(cpu PUBLIC
         ${CMAKE_SOURCE_DIR}/include/cpu
         )
 
+target_link_libraries(cpu PRIVATE
+        loggerLib)

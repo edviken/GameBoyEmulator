@@ -4,50 +4,7 @@
 
 #include "disassembler/Cartridge.hpp"
 
-#include <fstream>
-#include <iostream>
-#include <iterator>
-#include <string>
-
-#include <errno.h>
-#include <unistd.h>
-#include <valarray>
-
-void Cartridge::readDataFromFile(std::string filename) {  // TODO: Adapt for cross-platform compatibility ?
-  // TODO: Also do a pre-check that file exists ?
-  errno = 0;
-  std::ifstream file(filename, std::ios::in | std::ios::binary);
-  if (!file.is_open() || errno != 0) {
-    std::cout << "Errno: " << errno << " - " << strerror(errno) << std::endl;
-    std::cout << "Failed to open file: " << filename << std::endl;
-    char dirBuf[255]{};
-    auto dir = getcwd(dirBuf, 255);
-    std::cout << "Current dir reading from is: " << dir << std::endl;
-    assert(0);
-  }
-
-  // Stop eating new lines in binary mode
-  file.unsetf(std::ios::skipws);
-
-  // Find size of the file
-  file.seekg(0, file.end);
-  uint64_t size = file.tellg();
-  file.seekg(0, file.beg);
-  std::cout << "The file size is " << size << " bytes" << std::endl;
-
-  // Read the data from the file
-  _rawData.reserve(size);
-  _rawData.insert(_rawData.begin(), std::istream_iterator<uint8_t>(file), std::istream_iterator<uint8_t>());
-  file.close();
-
-  if (_rawData.size() >= CartridgeHeader::GlobalChecksum) {
-    std::cout << "Cartridge type: " << static_cast<int>(_rawData.at(CartridgeHeader::CartridgeType)) << std::endl;
-    std::cout << "Rom size: " << romSizes.at(static_cast<int>(_rawData.at(CartridgeHeader::RomSize))).first << "KiB"
-              << std::endl;
-    std::cout << "Ram size: " << ramSizes.at(static_cast<int>(_rawData.at(CartridgeHeader::RamSize))).first << "KiB"
-              << std::endl;
-  }
-}
+#include <cassert>
 
 std::vector<uint8_t> Cartridge::getProgramData() {
   if (_rawData.empty()) {
@@ -64,4 +21,20 @@ std::vector<uint8_t> Cartridge::getData() {
     assert(0);
   }
   return _rawData;
+}
+
+void Cartridge::setMemoryBankController() {
+  auto type = _rawData.at(CartridgeHeader::CartridgeType);
+  switch (type) {
+    case 0x00: {
+      NoMBC noMbc{};
+      _mbc = &noMbc;
+      break;
+    }
+    case 0x01: {
+      MBC1 mbc1{};
+      _mbc = &mbc1;
+      break;
+    }
+  }
 }
