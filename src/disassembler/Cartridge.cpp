@@ -10,7 +10,7 @@ std::vector<uint8_t> Cartridge::getProgramData() {
   if (_rawData.empty()) {
     assert(0);
   }
-  auto romSize = romSizes.at(_rawData.at(CartridgeHeader::RomSize)).first * _kiloMultiplyer;
+  auto romSize = romSizes.at(_rawData.at(CartridgeHeader::RomSize)).first * kiloMultiplyer;
   return std::vector<uint8_t>(
       _rawData.begin() + 0x150,
       _rawData.begin() + 0x150 + romSize);  // TODO: interpret this value from OPCode on 0x0100 - 0x0103

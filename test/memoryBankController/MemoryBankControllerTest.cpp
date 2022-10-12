@@ -22,6 +22,8 @@ class MemoryBankControllerTest : public ::testing::Test {
     inputCartridgeData.at(CartridgeHeader::CartridgeType) = 0x01;
     // 64KBytes rom, 4 Banks
     inputCartridgeData.at(CartridgeHeader::RomSize) = 0x01;
+    // 32KBytes ram, 4 banks of 8KBytes each
+    inputCartridgeData.at(CartridgeHeader::RamSize) = 0x03;
   }
 
   void TearDown() override {}
@@ -119,8 +121,8 @@ TEST_F(MemoryBankControllerTest, RamBankNumberSelect) {
   ASSERT_EQ(mbc1.getRamSize(), 32000);
 
   // Select ram bank in RAM mode
-  mbc1.write(0x5FFF, 0x05);
-  ASSERT_EQ(mbc1.getRamBankNumber(), 0x05);
+  mbc1.write(0x5FFF, 0x03);
+  ASSERT_EQ(mbc1.getRamBankNumber(), 0x03);
 }
 
 /*****************************************************
@@ -163,4 +165,45 @@ TEST_F(MemoryBankControllerTest, RomBankGeneral) {
   ASSERT_EQ(mbc1.read(0x7FFF), 2);
 }
 
-// Add ROM bank read special case: Bank nr > 1F.
+// TODO: Add ROM bank read special case: Bank nr > 1F.
+//TEST_F(MemoryBankControllerTest, RomBankSpecial) {
+//  // Setup for ROM bank 0x46
+//  inputCartridgeData.at(0x4000) = 21;
+//  inputCartridgeData.at(0x7FFF) = 21;
+//  // Register our ref input data
+//  mbc1.registerCartridgeData(std::move(inputCartridgeData));
+//
+//  // set ROM mode
+//  mbc1.write(0x6000, 0);
+//  // set ROM bank 46
+//  // Write 5 lower bits 0b0000 0110
+//  mbc1.write(0x2000, 0x06);
+//  // Write 2 upper bits 0b0010 << 5 => 0b0100 0110 = 0x46
+//  mbc1.write(0x4000, 0x02);
+//
+//  ASSERT_EQ(mbc1.read(0x4000), 21);
+//  ASSERT_EQ(mbc1.read(0x7FFF), 21);
+//}
+
+TEST_F(MemoryBankControllerTest, RamBankReadWrite) {
+  // 0xA000–0xBFFF — RAM Bank 00–03, if any
+  inputCartridgeData.at(0xA000) = 42;
+  inputCartridgeData.at(0xBFFF) = 43;
+  inputCartridgeData.at(0xC000) = 100;  // Start of bank 1
+  mbc1.registerCartridgeData(std::move(inputCartridgeData));
+  mbc1.write(0x0000, 0x00);  // Disable RAM
+
+  // Make sure we only receive 0xFF when RAM is disabled
+  ASSERT_EQ(mbc1.read(0xA000), 0xFF);
+
+  // Read when RAM is enabled
+  mbc1.write(0x0000, 0x0A);  // Enable RAM
+  // Read from RAM bank 0
+  ASSERT_EQ(mbc1.read(0xA000), 42);
+  ASSERT_EQ(mbc1.read(0xBFFF), 43);
+
+  // Read from other RAM bank 2
+  mbc1.write(0x6000, 0x01);           // Select RAM banking mode
+  mbc1.write(0x5FFF, 0x01);           // Select RAM bank 1
+  ASSERT_EQ(mbc1.read(0xA000), 100);  // Read from RAM bank 1
+}

@@ -117,11 +117,12 @@ class Cartridge : public CartridgeInterface {
   std::vector<uint8_t> getData() override;
 
  private:
+  static constexpr uint16_t kiloMultiplyer = 1000;
+
   void setMemoryBankController();
 
   LoaderInterface& _cartridgeLoader;
   std::vector<uint8_t> _rawData{};
-  uint16_t _kiloMultiplyer{1000};
   MemoryBankController* _mbc{nullptr};
 };
 

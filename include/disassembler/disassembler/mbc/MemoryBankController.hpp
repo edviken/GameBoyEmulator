@@ -62,13 +62,14 @@ class MBC1 : public MemoryBankController {
   uint32_t getRamSize() { return _ramSize; }
 
  private:
-  bool _isRamMode = false;  ///< Mode 0 (Rom mode) or mode 1 (Ram mode)
+  bool _isRamBankingMode = false;  ///< Mode 0 (Rom mode) or mode 1 (Ram mode)
   bool _isRamEnabled = false;
   uint8_t _romBankNumber = 1;
-  uint8_t _ramBankNumber = 1;
+  uint8_t _ramBankNumber = 0;
   uint32_t _romSize = 16000000u;  ///< Size in Bytes
   uint32_t _ramSize = 8000u;      ///< Size in Bytes
 
+  // Write only address ranges
   static constexpr uint16_t romBankNumberAddrStart = 0x2000u;
   static constexpr uint16_t romBankNumberAddrEnd = 0x3FFFu;
   static constexpr uint16_t modeSelectAddrStart = 0x6000u;
@@ -76,7 +77,12 @@ class MBC1 : public MemoryBankController {
   static constexpr uint16_t ramBankNumberAddrStart = 0x4000;
   static constexpr uint16_t ramBankNumberAddrEnd = 0x5FFF;
 
-  // For reading - addr ranges
+  // Read/Write address ranges
+  static constexpr uint16_t ramBankStart = 0xA000;
+  static constexpr uint16_t ramBankEnd = 0xBFFF;
+  static constexpr uint16_t ramBankSize = 0x2000;
+
+  // Read only address ranges
   static constexpr uint16_t firstRomBankStart = 0x0000u;
   static constexpr uint16_t firstRomBankEnd = 0x3FFFu;
   static constexpr uint16_t generalRomBankStart = 0x4000u;

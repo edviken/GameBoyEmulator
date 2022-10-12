@@ -19,6 +19,12 @@ uint8_t MBC1::read(uint16_t addr) const {
     return _data.at(addr);
   } else if (addr >= generalRomBankStart && addr <= generalRomBankEnd) {
     return _data.at(addr + ((_romBankNumber - 1) * generalRomBankStart));
+  } else if (addr >= ramBankStart && addr <= ramBankEnd) {
+    if (_isRamEnabled) {
+      return _data.at(addr + (_ramBankNumber * ramBankSize));
+    } else {
+      return 0xFF;
+    }
   }
   return 0;
 }
@@ -49,7 +55,7 @@ void MBC1::write(uint16_t addr, uint8_t value) {
         break;
     }
   } else if (addr >= ramBankNumberAddrStart && addr <= ramBankNumberAddrEnd) {
-    if (_isRamMode) {
+    if (_isRamBankingMode) {
       _ramBankNumber = value;
     } else {          // is in ROM mode
       value &= 0x03;  // We care only about the two first bits
@@ -58,12 +64,12 @@ void MBC1::write(uint16_t addr, uint8_t value) {
   } else if (addr >= modeSelectAddrStart && addr <= modeSelectAddrEnd) {
     switch (value) {
       case 0x00:
-        _isRamMode = false;
+        _isRamBankingMode = false;
         _romSize = 16000000u;
         _ramSize = 8000u;
         break;
       case 0x01:
-        _isRamMode = true;
+        _isRamBankingMode = true;
         _romSize = 4000000u;
         _ramSize = 32000u;
         break;
